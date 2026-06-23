@@ -1,0 +1,31 @@
+<h1>Chatbot AI</h1>
+
+<div id="chatBox" style="border:1px solid #ccc; height:300px; overflow:auto;"></div>
+
+<input type="text" id="message" placeholder="Tulis pesan..." />
+<button onclick="sendMessage()">Kirim</button>
+
+<script>
+async function sendMessage() {
+  const message = document.getElementById("message").value;
+
+  const res = await fetch("/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await res.json();
+
+  const box = document.getElementById("chatBox");
+
+  box.innerHTML += `<p><b>You:</b> ${message}</p>`;
+  box.innerHTML += `<p><b>AI:</b> ${data.reply}</p>`;
+
+  document.getElementById("message").value = "";
+
+  box.scrollTop = box.scrollHeight;
+}
+</script>
